@@ -1,3 +1,5 @@
+package com.ar50645.assignment3;
+
 public class EntityNotFoundException extends RuntimeException{
     /**
      * Constructs a new runtime exception with {@code null} as its

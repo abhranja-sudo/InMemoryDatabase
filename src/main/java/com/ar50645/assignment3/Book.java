@@ -1,7 +1,9 @@
+package com.ar50645.assignment3;
+
 import java.util.Objects;
 
 /**
- * No two Book can have same name
+ * No two com.ar50645.assignment3.Book can have same name
  */
 public class Book {
 
@@ -75,7 +77,7 @@ public class Book {
 
     @Override
     public String toString() {
-        return "Book{" +
+        return "com.ar50645.assignment3.Book{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", price=" + price +

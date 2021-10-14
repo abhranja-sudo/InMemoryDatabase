@@ -1,3 +1,5 @@
+package com.ar50645.assignment3;
+
 public interface Inventory {
 
     boolean addNewBook(Book newBook);

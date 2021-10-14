@@ -1,19 +1,20 @@
+package com.ar50645.assignment3;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class StoreInventory implements Inventory{
+public class StoreInventory implements Inventory {
 
     List<Book> bookInventoryCollection = new ArrayList<>();
 
     @Override
     public boolean addNewBook(Book newBook) {
-        long count = bookInventoryCollection
+        boolean isAlreadyPresent = bookInventoryCollection
                 .stream()
-                .filter(book -> book.equals(newBook))
-                .count();
+                .anyMatch(book -> book.equals(newBook));
 
-        if(count > 1){
+        if(isAlreadyPresent){
             return false;
         }
 
@@ -23,22 +24,14 @@ public class StoreInventory implements Inventory{
 
     @Override
     public boolean sellBook(Book bookToSell) throws EntityNotFoundException {
-
-        Optional<Book> optionalBook = bookInventoryCollection
-                .stream()
-                .findAny();
-
-        if( ! optionalBook.isPresent()) {
-            throw new EntityNotFoundException("Entity not found");
+        for (Book book : bookInventoryCollection) {
+            if(book.equals(bookToSell)) {
+                book.decrementQuantity();
+                return true;
+            }
         }
 
-        optionalBook.ifPresent(book -> {
-                book.decrementQuantity();
-                if(book.getQuantity() == 0) {
-                    bookInventoryCollection.remove(bookToSell);
-                }
-            });
-        return true;
+        throw new EntityNotFoundException("Entity not found");
     }
 
     @Override

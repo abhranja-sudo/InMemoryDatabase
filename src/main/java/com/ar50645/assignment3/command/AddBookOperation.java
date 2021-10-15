@@ -3,18 +3,20 @@ package com.ar50645.assignment3.command;
 import com.ar50645.assignment3.Book;
 import com.ar50645.assignment3.Inventory;
 
-public class AddBookOperation implements InventoryOperation{
+import java.io.Serializable;
 
-    private Inventory inventory;
+public class AddBookOperation implements InventoryOperation, Serializable {
+
     private Book book;
 
-    public AddBookOperation(Inventory inventory, Book book) {
-        this.inventory = inventory;
+    public AddBookOperation(Book book) {
         this.book = book;
     }
 
     @Override
-    public boolean execute() {
+    public boolean execute(Inventory inventory) {
         return inventory.addNewBook(book);
     }
+
+
 }

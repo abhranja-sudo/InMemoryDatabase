@@ -3,33 +3,55 @@ package com.ar50645.assignment3.Decorator;
 import com.ar50645.assignment3.Book;
 import com.ar50645.assignment3.EntityNotFoundException;
 import com.ar50645.assignment3.Inventory;
-import com.ar50645.assignment3.BookInventory;
+import com.ar50645.assignment3.ObjectReadWrite;
 import com.ar50645.assignment3.command.AddBookOperation;
 import com.ar50645.assignment3.command.InventoryOperation;
 import com.ar50645.assignment3.command.InventoryOperationExecutor;
+import com.ar50645.assignment3.command.SellBookOperation;
+
+import java.io.FileOutputStream;
 
 public class InventoryDecorator implements Inventory {
 
-    private Inventory bookInventory = new BookInventory();
-    private InventoryOperationExecutor inventoryOperationExecutor = new InventoryOperationExecutor();
+    private final String COMMAND_OUT_FILE =  "Command.ser";
+    private InventoryOperationExecutor inventoryOperationExecutor;
+    private ObjectReadWrite objectReadWrite;
+
+    public InventoryDecorator()  {
+        inventoryOperationExecutor = new InventoryOperationExecutor();
+        objectReadWrite = new ObjectReadWrite(COMMAND_OUT_FILE);
+    }
 
     @Override
     public boolean addNewBook(Book newBook) {
 
+        FileOutputStream fileOut;
+
         // Create Command
-        InventoryOperation addBookOperation = new AddBookOperation(bookInventory, newBook);
+        InventoryOperation addBookOperation = new AddBookOperation(newBook);
 
         // Execute Command
         inventoryOperationExecutor.executeOperation(addBookOperation);
 
-        // @@TODO Save Command
+        // Save Command
+        objectReadWrite.writeObject(addBookOperation);
 
         return true;
     }
 
     @Override
     public boolean sellBook(Book bookToSell) throws EntityNotFoundException {
-        return false;
+
+        // Create Command
+        InventoryOperation sellBookOperation = new SellBookOperation(bookToSell);
+
+        // Execute Command
+        inventoryOperationExecutor.executeOperation(sellBookOperation);
+
+        // Save Command
+        objectReadWrite.writeObject(sellBookOperation);
+
+        return true;
     }
 
     @Override

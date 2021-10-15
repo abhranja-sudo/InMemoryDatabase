@@ -1,11 +1,12 @@
 package com.ar50645.assignment3;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * No two com.ar50645.assignment3.Book can have same name
  */
-public class Book {
+public class Book implements Serializable {
 
     private int id;
     private String name;

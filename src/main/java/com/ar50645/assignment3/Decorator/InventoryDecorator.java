@@ -1,37 +1,35 @@
-package com.ar50645.assignment3;
+package com.ar50645.assignment3.Decorator;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import com.ar50645.assignment3.Book;
+import com.ar50645.assignment3.EntityNotFoundException;
+import com.ar50645.assignment3.Inventory;
+import com.ar50645.assignment3.BookInventory;
+import com.ar50645.assignment3.command.AddBookOperation;
+import com.ar50645.assignment3.command.InventoryOperation;
+import com.ar50645.assignment3.command.InventoryOperationExecutor;
 
-public class StoreInventory implements Inventory {
+public class InventoryDecorator implements Inventory {
 
-    List<Book> bookInventoryCollection = new ArrayList<>();
+    private Inventory bookInventory = new BookInventory();
+    private InventoryOperationExecutor inventoryOperationExecutor = new InventoryOperationExecutor();
 
     @Override
     public boolean addNewBook(Book newBook) {
-        boolean isAlreadyPresent = bookInventoryCollection
-                .stream()
-                .anyMatch(book -> book.equals(newBook));
 
-        if(isAlreadyPresent){
-            return false;
-        }
+        // Create Command
+        InventoryOperation addBookOperation = new AddBookOperation(bookInventory, newBook);
 
-        bookInventoryCollection.add(newBook);
+        // Execute Command
+        inventoryOperationExecutor.executeOperation(addBookOperation);
+
+        // @@TODO Save Command
+
         return true;
     }
 
     @Override
     public boolean sellBook(Book bookToSell) throws EntityNotFoundException {
-        for (Book book : bookInventoryCollection) {
-            if(book.equals(bookToSell)) {
-                book.decrementQuantity();
-                return true;
-            }
-        }
-
-        throw new EntityNotFoundException("Entity not found");
+        return false;
     }
 
     @Override

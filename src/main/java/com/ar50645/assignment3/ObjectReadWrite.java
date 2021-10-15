@@ -14,7 +14,7 @@ import java.io.PrintWriter;
  */
 public class ObjectReadWrite {
 
-    private String file;
+    private final String file;
     private ObjectOutputStream writeStream;
     private ObjectInputStream readStream;
 
@@ -42,9 +42,7 @@ public class ObjectReadWrite {
 
         try {
             initializesStreamWhenFileIsEmpty();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         if(writeStream == null) {
@@ -60,21 +58,22 @@ public class ObjectReadWrite {
         }
     }
 
-    // Initialize ObjectOutputStream when file is empty
     private void initializesStreamWhenFileIsEmpty() throws IOException, ClassNotFoundException {
         try {
-            ObjectInputStream is = new ObjectInputStream(new FileInputStream(file));
+             new ObjectInputStream(new FileInputStream(file));
         } catch (EOFException e) {
             writeStream = new ObjectOutputStream(new FileOutputStream(file));
-            return;
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public boolean writeObject(Object e) throws IOException {
-        writeStream.writeObject(e);
-        return true;
+    public void writeObject(Object e) {
+        try {
+            writeStream.writeObject(e);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**
@@ -91,7 +90,6 @@ public class ObjectReadWrite {
         return null;
     }
 
-    //Resets the file
     public void clearFile() throws IOException {
         FileWriter fileWriter = new FileWriter(file, false);
         PrintWriter printWriter = new PrintWriter(fileWriter, false);

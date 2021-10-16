@@ -18,5 +18,10 @@ public class AddBookOperation implements InventoryOperation, Serializable {
         return inventory.addNewBook(book);
     }
 
-
+    @Override
+    public String toString() {
+        return "AddBookOperation{" +
+                "book=" + book +
+                '}';
+    }
 }

@@ -90,11 +90,20 @@ public class ObjectReadWrite {
         return null;
     }
 
-    public void clearFile() throws IOException {
-        FileWriter fileWriter = new FileWriter(file, false);
+    public static void clearFile(String file) {
+        FileWriter fileWriter = null;
+        try {
+            fileWriter = new FileWriter(file, false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         PrintWriter printWriter = new PrintWriter(fileWriter, false);
         printWriter.flush();
         printWriter.close();
-        fileWriter.close();
+        try {
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

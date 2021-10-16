@@ -1,13 +1,28 @@
 package com.ar50645.assignment3;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
+/**
+ * Singleton implementation for BookInventory.
+ * Also act as CareTaker for BookList Memento
+ */
 public class BookInventory implements Inventory {
 
-    //Singleton
+    private int intervalForBackup = 3;
+    private int counterForBackUp = 0;
+    private static final String BOOK_LIST_MEMENTO_FILENAME = "BookListMemento.ser";
+    private BookList bookList = new BookList();
+
+    //load BookList memento if available
+    {
+        ObjectReadWrite objectReadWrite = new ObjectReadWrite(BOOK_LIST_MEMENTO_FILENAME);
+        BookListState state = (BookListState) objectReadWrite.readNext();
+        if(state != null) {
+            bookList.restore(state);
+        }
+        else {
+            bookList = new BookList();
+        }
+    }
+
     private static Inventory bookInventory;
 
     private BookInventory() {
@@ -20,33 +35,41 @@ public class BookInventory implements Inventory {
         return bookInventory;
     }
 
-    List<Book> bookInventoryCollection = new ArrayList<>();
+    private void checkBackup() {
+        counterForBackUp++;
+        if(counterForBackUp == intervalForBackup) {
+            ObjectReadWrite.clearFile(BOOK_LIST_MEMENTO_FILENAME);
+            ObjectReadWrite objectReadWrite = new ObjectReadWrite(BOOK_LIST_MEMENTO_FILENAME);
+            BookListState state = bookList.saveMemento();
+            objectReadWrite.writeObject(state);
+
+            //resets counter
+            counterForBackUp = 0;
+        }
+    }
 
     @Override
     public boolean addNewBook(Book newBook) {
-        boolean isAlreadyPresent = bookInventoryCollection
-                .stream()
-                .anyMatch(book -> book.equals(newBook));
-
-        if(isAlreadyPresent){
+        if(bookList.contains(newBook)) {
             return false;
         }
-
         if(newBook.getQuantity() < 1)
             throw new IllegalArgumentException("Book should have at least one quantity");
 
-        bookInventoryCollection.add(newBook);
+        bookList.add(newBook);
+        checkBackup();
         return true;
     }
 
     @Override
     public boolean sellBook(Book bookToSell) throws EntityNotFoundException {
-        for (Book book : bookInventoryCollection) {
+        for (Book book : bookList.getBookList()) {
             if(book.equals(bookToSell)) {
                 book.decrementQuantity();
                 if(book.getQuantity() < 1) {
-                    bookInventoryCollection.remove(book);
+                    bookList.remove(book);
                 }
+                checkBackup();
                 return true;
             }
         }
@@ -83,29 +106,4 @@ public class BookInventory implements Inventory {
         return 0;
     }
 
-    public void restore(BookInventoryState InventoryMemento) {
-        if(InventoryMemento != null) {
-            List<Book> bookInventory = new ArrayList<>();
-            for(Book book : InventoryMemento.getBookInventoryCollection()) {
-                try {
-                    bookInventory.add(book.clone());
-                } catch (CloneNotSupportedException e) {
-                    e.printStackTrace();
-                }
-            }
-            bookInventoryCollection = bookInventory;
-        }
-    }
-
-    public BookInventoryState saveMemento() {
-        List<Book> bookInventoryCopy = new ArrayList<>();
-        for(Book book : bookInventoryCollection) {
-            try {
-                bookInventoryCopy.add(book.clone());
-            } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
-            }
-        }
-        return new BookInventoryState(bookInventoryCopy);
-    }
 }

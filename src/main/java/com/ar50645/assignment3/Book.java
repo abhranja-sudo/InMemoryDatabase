@@ -13,6 +13,7 @@ public class Book implements Serializable, Cloneable {
     private double price;
     private int quantity;
 
+    //Used to assign uniqueId to Book
     private static int sequenceCounter = 0;
 
     public Book(String name, double price, int quantity) {
@@ -89,7 +90,6 @@ public class Book implements Serializable, Cloneable {
     /**
      * Book instance variables includes only primitives and immutables, so deep copy not required
      * @return cloned copy
-     * @throws CloneNotSupportedException
      */
     @Override
     public Book clone() throws CloneNotSupportedException {

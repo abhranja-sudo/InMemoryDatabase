@@ -1,4 +1,4 @@
-package com.ar50645.assignment3;
+package com.ar50645.assignment3.fileio;
 
 import java.io.EOFException;
 import java.io.FileInputStream;

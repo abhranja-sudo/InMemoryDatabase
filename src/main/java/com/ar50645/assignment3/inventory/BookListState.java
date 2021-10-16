@@ -1,4 +1,4 @@
-package com.ar50645.assignment3;
+package com.ar50645.assignment3.inventory;
 
 import java.io.Serializable;
 import java.util.List;

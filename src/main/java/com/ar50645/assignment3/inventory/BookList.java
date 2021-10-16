@@ -1,4 +1,4 @@
-package com.ar50645.assignment3;
+package com.ar50645.assignment3.inventory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public class BookList {
     }
 
     public boolean contains(Book book) {
-        return !bookList.contains(book) ? false : true;
+        return bookList.contains(book);
     }
 
     public void remove(Book book) {

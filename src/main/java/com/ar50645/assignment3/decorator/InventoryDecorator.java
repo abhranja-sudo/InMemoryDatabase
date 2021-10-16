@@ -1,9 +1,9 @@
-package com.ar50645.assignment3.Decorator;
+package com.ar50645.assignment3.decorator;
 
-import com.ar50645.assignment3.Book;
-import com.ar50645.assignment3.EntityNotFoundException;
-import com.ar50645.assignment3.Inventory;
-import com.ar50645.assignment3.ObjectReadWrite;
+import com.ar50645.assignment3.inventory.Book;
+import com.ar50645.assignment3.exception.EntityNotFoundException;
+import com.ar50645.assignment3.inventory.Inventory;
+import com.ar50645.assignment3.fileio.ObjectReadWrite;
 import com.ar50645.assignment3.command.AddBookOperation;
 import com.ar50645.assignment3.command.InventoryOperation;
 import com.ar50645.assignment3.command.InventoryOperationExecutor;

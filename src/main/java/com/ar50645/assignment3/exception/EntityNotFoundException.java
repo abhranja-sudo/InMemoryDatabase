@@ -1,4 +1,4 @@
-package com.ar50645.assignment3;
+package com.ar50645.assignment3.exception;
 
 public class EntityNotFoundException extends RuntimeException{
     /**

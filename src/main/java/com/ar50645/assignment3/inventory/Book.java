@@ -1,11 +1,9 @@
-package com.ar50645.assignment3;
+package com.ar50645.assignment3.inventory;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * No two com.ar50645.assignment3.Book can have same name
- */
+
 public class Book implements Serializable, Cloneable {
 
     private int id;
@@ -79,7 +77,7 @@ public class Book implements Serializable, Cloneable {
 
     @Override
     public String toString() {
-        return "com.ar50645.assignment3.Book{" +
+        return "com.ar50645.assignment3.inventory.Book{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", price=" + price +

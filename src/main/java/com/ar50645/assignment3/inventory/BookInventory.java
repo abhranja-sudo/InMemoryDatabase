@@ -1,12 +1,12 @@
-package com.ar50645.assignment3;
+package com.ar50645.assignment3.inventory;
 
-/**
- * Singleton implementation for BookInventory.
- * Also act as CareTaker for BookList Memento
- */
+import com.ar50645.assignment3.exception.EntityNotFoundException;
+import com.ar50645.assignment3.fileio.ObjectReadWrite;
+
+
 public class BookInventory implements Inventory {
 
-    private int intervalForBackup = 3;
+    private static final int intervalForBackup = 3;
     private int counterForBackUp = 0;
     private static final String BOOK_LIST_MEMENTO_FILENAME = "BookListMemento.ser";
     private BookList bookList = new BookList();
@@ -23,16 +23,9 @@ public class BookInventory implements Inventory {
         }
     }
 
-    private static Inventory bookInventory;
-
-    private BookInventory() {
-    }
 
     public static Inventory getBookInventory() {
-        if(bookInventory == null) {
-            bookInventory = new BookInventory();
-        }
-        return bookInventory;
+        return new BookInventory();
     }
 
     private void checkBackup() {
@@ -50,11 +43,13 @@ public class BookInventory implements Inventory {
 
     @Override
     public boolean addNewBook(Book newBook) {
+
+        if(newBook.getQuantity() < 1)
+            throw new IllegalArgumentException("Book should have at least one quantity");
+
         if(bookList.contains(newBook)) {
             return false;
         }
-        if(newBook.getQuantity() < 1)
-            throw new IllegalArgumentException("Book should have at least one quantity");
 
         bookList.add(newBook);
         checkBackup();
@@ -104,6 +99,10 @@ public class BookInventory implements Inventory {
     @Override
     public double findQuantityByID(int id) throws EntityNotFoundException {
         return 0;
+    }
+
+    public BookList getBookList() {
+        return bookList;
     }
 
 }

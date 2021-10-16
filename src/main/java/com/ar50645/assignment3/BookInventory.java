@@ -8,12 +8,15 @@ import java.util.Optional;
 public class BookInventory implements Inventory {
 
     //Singleton
-    private static final Inventory bookInventory = new BookInventory();
+    private static Inventory bookInventory;
 
     private BookInventory() {
     }
 
     public static Inventory getBookInventory() {
+        if(bookInventory == null) {
+            bookInventory = new BookInventory();
+        }
         return bookInventory;
     }
 
@@ -41,6 +44,9 @@ public class BookInventory implements Inventory {
         for (Book book : bookInventoryCollection) {
             if(book.equals(bookToSell)) {
                 book.decrementQuantity();
+                if(book.getQuantity() < 1) {
+                    bookInventoryCollection.remove(book);
+                }
                 return true;
             }
         }
@@ -75,5 +81,31 @@ public class BookInventory implements Inventory {
     @Override
     public double findQuantityByID(int id) throws EntityNotFoundException {
         return 0;
+    }
+
+    public void restore(BookInventoryState InventoryMemento) {
+        if(InventoryMemento != null) {
+            List<Book> bookInventory = new ArrayList<>();
+            for(Book book : InventoryMemento.getBookInventoryCollection()) {
+                try {
+                    bookInventory.add(book.clone());
+                } catch (CloneNotSupportedException e) {
+                    e.printStackTrace();
+                }
+            }
+            bookInventoryCollection = bookInventory;
+        }
+    }
+
+    public BookInventoryState saveMemento() {
+        List<Book> bookInventoryCopy = new ArrayList<>();
+        for(Book book : bookInventoryCollection) {
+            try {
+                bookInventoryCopy.add(book.clone());
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+        }
+        return new BookInventoryState(bookInventoryCopy);
     }
 }

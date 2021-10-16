@@ -6,7 +6,7 @@ import java.util.Objects;
 /**
  * No two com.ar50645.assignment3.Book can have same name
  */
-public class Book implements Serializable {
+public class Book implements Serializable, Cloneable {
 
     private int id;
     private String name;
@@ -84,5 +84,15 @@ public class Book implements Serializable {
                 ", price=" + price +
                 ", quantity=" + quantity +
                 '}';
+    }
+
+    /**
+     * Book instance variables includes only primitives and immutables, so deep copy not required
+     * @return cloned copy
+     * @throws CloneNotSupportedException
+     */
+    @Override
+    public Book clone() throws CloneNotSupportedException {
+        return (Book) super.clone();
     }
 }

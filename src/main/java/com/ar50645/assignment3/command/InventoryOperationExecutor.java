@@ -11,6 +11,8 @@ public class InventoryOperationExecutor {
     private FileOperation fileOperation = new FileOperation(COMMAND_FILE_NAME);
 
     public InventoryOperationExecutor(Inventory inventory) {
+
+        //Execute saved commands from file, if any
         InventoryOperation commandHistory = (InventoryOperation) fileOperation.readNext();
         while (commandHistory != null) {
             executeOperation(inventory, commandHistory);

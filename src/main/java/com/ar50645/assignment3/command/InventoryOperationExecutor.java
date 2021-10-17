@@ -10,10 +10,10 @@ public class InventoryOperationExecutor {
     private final static String COMMAND_FILE_NAME =  "Command.ser";
     private FileOperation fileOperation = new FileOperation(COMMAND_FILE_NAME);
 
-    public InventoryOperationExecutor() {
+    public InventoryOperationExecutor(Inventory inventory) {
         InventoryOperation commandHistory = (InventoryOperation) fileOperation.readNext();
         while (commandHistory != null) {
-            executeOperation(BookInventory.getBookInventory(), commandHistory);
+            executeOperation(inventory, commandHistory);
             commandHistory = (InventoryOperation) fileOperation.readNext();
         }
     }

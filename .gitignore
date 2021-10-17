@@ -28,3 +28,4 @@
 /target/test-classes/com/ar50645/assignment3/decorator/InventoryDecoratorTTest.class
 /target/surefire-reports/TEST-com.ar50645.assignment3.decorator.InventoryDecoratorTest.xml
 /target/surefire-reports/TEST-com.ar50645.assignment3.inventory.BookInventoryTest.xml
+/target/test-classes/com/ar50645/assignment3/decorator/InventoryDecoratorTest.class

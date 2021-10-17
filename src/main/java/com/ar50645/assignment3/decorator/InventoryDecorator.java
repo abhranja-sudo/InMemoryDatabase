@@ -14,8 +14,10 @@ public class InventoryDecorator implements Inventory {
     private final String COMMAND_OUT_FILE =  "Command.ser";
     private InventoryOperationExecutor inventoryOperationExecutor;
     private FileOperation fileOperation;
+    private Inventory inventory;
 
-    public InventoryDecorator()  {
+    public InventoryDecorator(Inventory inventory)  {
+        this.inventory = inventory;
         inventoryOperationExecutor = new InventoryOperationExecutor();
         fileOperation = new FileOperation(COMMAND_OUT_FILE);
     }
@@ -27,7 +29,7 @@ public class InventoryDecorator implements Inventory {
         InventoryOperation addBookOperation = new AddBookOperation(newBook);
 
         // Execute Command
-        inventoryOperationExecutor.executeOperation(addBookOperation);
+        inventoryOperationExecutor.executeOperation(inventory, addBookOperation);
 
         // Save Command
         fileOperation.writeObject(addBookOperation);
@@ -42,7 +44,7 @@ public class InventoryDecorator implements Inventory {
         InventoryOperation sellBookOperation = new SellBookOperation(bookToSell);
 
         // Execute Command
-        inventoryOperationExecutor.executeOperation(sellBookOperation);
+        inventoryOperationExecutor.executeOperation(inventory,sellBookOperation);
 
         // Save Command
         fileOperation.writeObject(sellBookOperation);

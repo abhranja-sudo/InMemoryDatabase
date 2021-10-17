@@ -1,6 +1,6 @@
 package com.ar50645.assignment3.inventory;
 
-import com.ar50645.assignment3.fileio.ObjectReadWrite;
+import com.ar50645.assignment3.fileio.FileOperation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,12 +15,12 @@ class BookInventoryTest {
     private static final int intervalForBackup = 3;
     private int counter = 0;
     private static final String BOOK_LIST_MEMENTO_FILENAME = "BookListMemento.ser";
-    private ObjectReadWrite mementoReadWrite;
+    private FileOperation mementoReadWrite;
 
     @BeforeEach
     void setUp() {
-        ObjectReadWrite.clearFile(BOOK_LIST_MEMENTO_FILENAME);
-        mementoReadWrite = new ObjectReadWrite(BOOK_LIST_MEMENTO_FILENAME);
+        FileOperation.clearFile(BOOK_LIST_MEMENTO_FILENAME);
+        mementoReadWrite = new FileOperation(BOOK_LIST_MEMENTO_FILENAME);
         bookInventory = BookInventory.getBookInventory();
     }
 

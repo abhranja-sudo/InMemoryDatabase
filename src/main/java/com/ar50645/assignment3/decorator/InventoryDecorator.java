@@ -3,29 +3,25 @@ package com.ar50645.assignment3.decorator;
 import com.ar50645.assignment3.inventory.Book;
 import com.ar50645.assignment3.exception.EntityNotFoundException;
 import com.ar50645.assignment3.inventory.Inventory;
-import com.ar50645.assignment3.fileio.ObjectReadWrite;
+import com.ar50645.assignment3.fileio.FileOperation;
 import com.ar50645.assignment3.command.AddBookOperation;
 import com.ar50645.assignment3.command.InventoryOperation;
 import com.ar50645.assignment3.command.InventoryOperationExecutor;
 import com.ar50645.assignment3.command.SellBookOperation;
 
-import java.io.FileOutputStream;
-
 public class InventoryDecorator implements Inventory {
 
     private final String COMMAND_OUT_FILE =  "Command.ser";
     private InventoryOperationExecutor inventoryOperationExecutor;
-    private ObjectReadWrite objectReadWrite;
+    private FileOperation fileOperation;
 
     public InventoryDecorator()  {
         inventoryOperationExecutor = new InventoryOperationExecutor();
-        objectReadWrite = new ObjectReadWrite(COMMAND_OUT_FILE);
+        fileOperation = new FileOperation(COMMAND_OUT_FILE);
     }
 
     @Override
     public boolean addNewBook(Book newBook) {
-
-        FileOutputStream fileOut;
 
         // Create Command
         InventoryOperation addBookOperation = new AddBookOperation(newBook);
@@ -34,7 +30,7 @@ public class InventoryDecorator implements Inventory {
         inventoryOperationExecutor.executeOperation(addBookOperation);
 
         // Save Command
-        objectReadWrite.writeObject(addBookOperation);
+        fileOperation.writeObject(addBookOperation);
 
         return true;
     }
@@ -49,7 +45,7 @@ public class InventoryDecorator implements Inventory {
         inventoryOperationExecutor.executeOperation(sellBookOperation);
 
         // Save Command
-        objectReadWrite.writeObject(sellBookOperation);
+        fileOperation.writeObject(sellBookOperation);
 
         return true;
     }

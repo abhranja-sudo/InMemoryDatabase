@@ -12,13 +12,13 @@ import java.io.PrintWriter;
 /**
  * Library can be used to read and write to file
  */
-public class ObjectReadWrite {
+public class FileOperation {
 
     private final String file;
     private ObjectOutputStream writeStream;
     private ObjectInputStream readStream;
 
-    public ObjectReadWrite(String file) {
+    public FileOperation(String file) {
         this.file = file;
         initializeWriteStream();
         initializeReadStream();

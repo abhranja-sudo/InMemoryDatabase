@@ -1,7 +1,7 @@
 package com.ar50645.assignment3.inventory;
 
 import com.ar50645.assignment3.exception.EntityNotFoundException;
-import com.ar50645.assignment3.fileio.ObjectReadWrite;
+import com.ar50645.assignment3.fileio.FileOperation;
 
 
 public class BookInventory implements Inventory {
@@ -13,8 +13,8 @@ public class BookInventory implements Inventory {
 
     //load BookList memento if available
     {
-        ObjectReadWrite objectReadWrite = new ObjectReadWrite(BOOK_LIST_MEMENTO_FILENAME);
-        BookListState state = (BookListState) objectReadWrite.readNext();
+        FileOperation fileOperation = new FileOperation(BOOK_LIST_MEMENTO_FILENAME);
+        BookListState state = (BookListState) fileOperation.readNext();
         if(state != null) {
             bookList.restore(state);
         }
@@ -31,10 +31,10 @@ public class BookInventory implements Inventory {
     private void checkBackup() {
         counterForBackUp++;
         if(counterForBackUp == intervalForBackup) {
-            ObjectReadWrite.clearFile(BOOK_LIST_MEMENTO_FILENAME);
-            ObjectReadWrite objectReadWrite = new ObjectReadWrite(BOOK_LIST_MEMENTO_FILENAME);
+            FileOperation.clearFile(BOOK_LIST_MEMENTO_FILENAME);
+            FileOperation fileOperation = new FileOperation(BOOK_LIST_MEMENTO_FILENAME);
             BookListState state = bookList.saveMemento();
-            objectReadWrite.writeObject(state);
+            fileOperation.writeObject(state);
 
             //resets counter
             counterForBackUp = 0;

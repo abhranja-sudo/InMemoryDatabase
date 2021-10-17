@@ -1,16 +1,10 @@
 package com.ar50645.assignment3.fileio;
 
-import java.io.EOFException;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
+import java.io.*;
+import java.nio.channels.FileChannel;
 
 /**
- * Library can be used to read and write to file
+ * Library can be used to read, write and clear the file
  */
 public class FileOperation {
 
@@ -97,11 +91,30 @@ public class FileOperation {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         PrintWriter printWriter = new PrintWriter(fileWriter, false);
         printWriter.flush();
         printWriter.close();
+
         try {
             fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * copy contents from file1 to file2
+     * @param file1 source file
+     * @param file2 destination file
+     */
+    public static void copyFile(String file1, String file2) {
+        clearFile(file2);
+
+        try (FileChannel src = new FileInputStream(file1).getChannel()) {
+            FileChannel dest = new FileOutputStream(file2).getChannel();
+            dest.transferFrom(src, 0, src.size());
         } catch (IOException e) {
             e.printStackTrace();
         }

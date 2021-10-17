@@ -9,6 +9,9 @@ public class BookInventory implements Inventory {
     private static final int intervalForBackup = 3;
     private int counterForBackUp = 0;
     private static final String BOOK_LIST_MEMENTO_FILENAME = "BookListMemento.ser";
+    private static final String BOOK_LIST_MEMENTO_TEMP_FILE = "BookListMementoTemp.ser";
+
+    private final String COMMAND_OUT_FILE =  "Command.ser";
     private BookList bookList = new BookList();
 
     //load BookList memento if available
@@ -28,13 +31,28 @@ public class BookInventory implements Inventory {
         return new BookInventory();
     }
 
+    /**
+     * If it's time to back up the Memento,
+     * 1. copy the original memento to temporary file
+     * 2. copy the new memento to BOOK_LIST_MEMENTO_FILENAME
+     * 3. once copied, we can clear the temporary and command file
+     *
+     * The temporary file is used to keep backup until the updated data is safely copied to original file.
+     */
     private void checkBackup() {
         counterForBackUp++;
         if(counterForBackUp == intervalForBackup) {
+
+            FileOperation.copyFile(BOOK_LIST_MEMENTO_FILENAME, BOOK_LIST_MEMENTO_TEMP_FILE);
             FileOperation.clearFile(BOOK_LIST_MEMENTO_FILENAME);
+
             FileOperation fileOperation = new FileOperation(BOOK_LIST_MEMENTO_FILENAME);
             BookListState state = bookList.saveMemento();
             fileOperation.writeObject(state);
+
+            //clear file
+            FileOperation.clearFile(BOOK_LIST_MEMENTO_TEMP_FILE);
+            FileOperation.clearFile(COMMAND_OUT_FILE);
 
             //resets counter
             counterForBackUp = 0;

@@ -14,7 +14,7 @@ public class BookInventory implements Inventory {
     private final String COMMAND_OUT_FILE =  "Command.ser";
     private BookList bookList = new BookList();
 
-    //load BookList memento if available
+    //load BookList from memento if available
     {
         FileOperation fileOperation = new FileOperation(BOOK_LIST_MEMENTO_FILENAME);
         BookListState state = (BookListState) fileOperation.readNext();

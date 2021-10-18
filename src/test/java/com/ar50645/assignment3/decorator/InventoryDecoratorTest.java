@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class InventoryDecoratorTest {
 
     private final String COMMAND_OUT_FILE =  "Command.ser";
-    private InventoryOperationExecutor inventoryOperationExecutor;
     private FileOperation commandReadWrite;
     private Inventory inventoryDecorator;
 

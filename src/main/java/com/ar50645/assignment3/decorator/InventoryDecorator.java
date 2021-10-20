@@ -1,20 +1,22 @@
 package com.ar50645.assignment3.decorator;
 
+import com.ar50645.assignment3.command.AddBookOperation;
+import com.ar50645.assignment3.command.AddCopyOperation;
+import com.ar50645.assignment3.command.ChangePriceOperation;
+import com.ar50645.assignment3.command.InventoryOperation;
+import com.ar50645.assignment3.command.InventoryOperationExecutor;
+import com.ar50645.assignment3.command.SellBookOperation;
 import com.ar50645.assignment3.inventory.Book;
 import com.ar50645.assignment3.exception.EntityNotFoundException;
 import com.ar50645.assignment3.inventory.Inventory;
 import com.ar50645.assignment3.fileio.FileOperation;
-import com.ar50645.assignment3.command.AddBookOperation;
-import com.ar50645.assignment3.command.InventoryOperation;
-import com.ar50645.assignment3.command.InventoryOperationExecutor;
-import com.ar50645.assignment3.command.SellBookOperation;
 
 public class InventoryDecorator implements Inventory {
 
     private final String COMMAND_OUT_FILE =  "Command.ser";
-    private InventoryOperationExecutor inventoryOperationExecutor;
-    private FileOperation fileOperation;
-    private Inventory inventory;
+    private final InventoryOperationExecutor inventoryOperationExecutor;
+    private final FileOperation fileOperation;
+    private final Inventory inventory;
 
     public InventoryDecorator(Inventory inventory)  {
         this.inventory = inventory;
@@ -54,12 +56,32 @@ public class InventoryDecorator implements Inventory {
 
     @Override
     public boolean addCopy(Book book, int quantity) throws EntityNotFoundException {
-        return false;
+
+        // Create Command
+        InventoryOperation addCopyOperation = new AddCopyOperation(book, quantity);
+
+        // Execute Command
+        inventoryOperationExecutor.executeOperation(inventory, addCopyOperation);
+
+        // Save Command
+        fileOperation.writeObject(addCopyOperation);
+
+        return true;
     }
 
     @Override
     public boolean changePrice(Book book, double newPrice) throws EntityNotFoundException {
-        return false;
+
+        // Create Command
+        InventoryOperation changePriceOperation = new ChangePriceOperation(book, newPrice);
+
+        // Execute Command
+        inventoryOperationExecutor.executeOperation(inventory, changePriceOperation);
+
+        // Save Command
+        fileOperation.writeObject(changePriceOperation);
+
+        return true;
     }
 
     @Override
@@ -69,21 +91,21 @@ public class InventoryDecorator implements Inventory {
 
     @Override
     public double findPriceByName(String bookName) throws EntityNotFoundException {
-        return 0;
+        return inventory.findPriceByName(bookName);
     }
 
     @Override
     public double findPriceByID(int id) throws EntityNotFoundException {
-        return 0;
+        return inventory.findPriceByID(id);
     }
 
     @Override
     public double findQuantityByName(String bookName) throws EntityNotFoundException {
-        return 0;
+        return inventory.findQuantityByName(bookName);
     }
 
     @Override
     public double findQuantityByID(int id) throws EntityNotFoundException {
-        return 0;
+        return inventory.findQuantityByID(id);
     }
 }

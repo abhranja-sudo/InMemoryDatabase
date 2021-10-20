@@ -68,22 +68,6 @@ class InventoryDecoratorTest {
         for (Book book : validTestData) {
             Assertions.assertTrue(inventoryDecorator.addNewBook(book));
         }
-
-        //check if the command has been saved to COMMAND_OUT_FILE
-        List<InventoryOperation> expectedList = validTestData.stream()
-                .map(AddBookOperation::new)
-                .collect(Collectors.toList());
-
-        List<InventoryOperation> actualList = new ArrayList<>();
-
-        //get command List from file
-        InventoryOperation command = (InventoryOperation) commandReadWrite.readNext();
-        while (command != null) {
-            actualList.add(command);
-            command = (InventoryOperation) commandReadWrite.readNext();
-        }
-
-        Assertions.assertEquals(expectedList, actualList);
     }
 
     @Test

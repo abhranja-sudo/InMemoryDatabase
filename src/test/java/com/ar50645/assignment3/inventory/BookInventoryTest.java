@@ -42,7 +42,7 @@ class BookInventoryTest {
     void addNewBookWhenBookAlreadyExists() {
 
         Book testData = new Book("testBook", 45, 2);
-        Assertions.assertTrue(bookInventory.addNewBook(testData));
+        bookInventory.addNewBook(testData);
 
         //Addition of Duplicate book in inventory should return false
         Assertions.assertFalse(bookInventory.addNewBook(testData));
@@ -62,7 +62,8 @@ class BookInventoryTest {
         Book testData = new Book("testBook", 45, 2);
         double expectedQuantity = testData.getQuantity() - 1;
 
-        Assertions.assertTrue(bookInventory.addNewBook(testData));
+        bookInventory.addNewBook(testData);
+
         Assertions.assertTrue(bookInventory.sellBook(testData));
 
         double actualQuantity = bookInventory.findQuantityByName(testData.getName());
@@ -73,7 +74,8 @@ class BookInventoryTest {
     void sellBookWhenQuantityEqualToOne() {
 
         Book testData = new Book("testBook", 45, 1);
-        Assertions.assertTrue(bookInventory.addNewBook(testData));
+        bookInventory.addNewBook(testData);
+
         Assertions.assertTrue(bookInventory.sellBook(testData));
 
         //sold book shouldn't be present in the inventory since the only copy is sold
@@ -96,7 +98,8 @@ class BookInventoryTest {
         int quantityToAdd = 3;
         int expectedQuantity = testData.getQuantity() + quantityToAdd;
 
-        Assertions.assertTrue(bookInventory.addNewBook(testData));
+        bookInventory.addNewBook(testData);
+
         Assertions.assertTrue(bookInventory.addCopy(testData, quantityToAdd));
 
         double actualQuantity = bookInventory.findQuantityByName(testData.getName());
@@ -119,7 +122,7 @@ class BookInventoryTest {
         Book testData = new Book("testBook", 45.3, 3);
         double newPrice = 88.3;
 
-        Assertions.assertTrue(bookInventory.addNewBook(testData));
+        bookInventory.addNewBook(testData);
         Assertions.assertTrue(bookInventory.changePrice(testData, newPrice));
 
         double actualQuantity = bookInventory.findPriceByName(testData.getName());

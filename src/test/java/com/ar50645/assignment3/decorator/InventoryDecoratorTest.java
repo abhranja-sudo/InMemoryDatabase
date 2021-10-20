@@ -57,6 +57,7 @@ class InventoryDecoratorTest {
 
     @Test
     void sellBook() {
+
     }
 
     private List<Book> getValidTestData() {

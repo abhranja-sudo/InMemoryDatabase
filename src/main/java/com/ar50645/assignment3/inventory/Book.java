@@ -62,6 +62,10 @@ public class Book implements Serializable, Cloneable {
         this.quantity = quantity;
     }
 
+    public void increaseQuantity(int quantityToIncrease) {
+        this.quantity += quantityToIncrease;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -44,7 +44,7 @@ public class InventoryDecorator implements Inventory {
         InventoryOperation sellBookOperation = new SellBookOperation(bookToSell);
 
         // Execute Command
-        inventoryOperationExecutor.executeOperation(inventory,sellBookOperation);
+        inventoryOperationExecutor.executeOperation(inventory, sellBookOperation);
 
         // Save Command
         fileOperation.writeObject(sellBookOperation);
@@ -53,13 +53,18 @@ public class InventoryDecorator implements Inventory {
     }
 
     @Override
-    public boolean addCopy(Book book) throws EntityNotFoundException {
+    public boolean addCopy(Book book, int quantity) throws EntityNotFoundException {
         return false;
     }
 
     @Override
-    public boolean changePrice(Book book) throws EntityNotFoundException {
+    public boolean changePrice(Book book, double newPrice) throws EntityNotFoundException {
         return false;
+    }
+
+    @Override
+    public boolean isBookAvailable(Book book) {
+        return inventory.isBookAvailable(book);
     }
 
     @Override

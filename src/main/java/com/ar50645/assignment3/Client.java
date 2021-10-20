@@ -7,12 +7,12 @@ import com.ar50645.assignment3.inventory.Inventory;
 public class Client {
     public static void main(String[] args) {
 
-        Inventory inventory = new InventoryDecorator();
-        Book b1 = new Book("book10", 88,3);
-        Book b2 = new Book("book8", 98,4);
-//        Book b3 = new Book("book6", 108,6);
-////
-        inventory.addNewBook(b1);
+//        Inventory inventory = new InventoryDecorator();
+//        Book b1 = new Book("book10", 88,3);
+//        Book b2 = new Book("book8", 98,4);
+////        Book b3 = new Book("book6", 108,6);
+//////
+//        inventory.addNewBook(b1);
 //        inventory.addNewBook(b2);
 //        inventory.addNewBook(b3);
 

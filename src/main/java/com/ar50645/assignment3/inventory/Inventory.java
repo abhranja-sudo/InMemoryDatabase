@@ -8,9 +8,11 @@ public interface Inventory {
 
     boolean sellBook(Book bookToSell) throws EntityNotFoundException;
 
-    boolean addCopy(Book book) throws EntityNotFoundException;
+    boolean addCopy(Book book, int quantity) throws EntityNotFoundException;
 
-    boolean changePrice(Book book) throws EntityNotFoundException;
+    boolean changePrice(Book book, double newPrice) throws EntityNotFoundException;
+
+    boolean isBookAvailable(Book book);
 
     double findPriceByName(String bookName) throws EntityNotFoundException;
 
@@ -19,5 +21,7 @@ public interface Inventory {
     double findQuantityByName(String bookName) throws EntityNotFoundException;
 
     double findQuantityByID(int id) throws EntityNotFoundException;
+
+
 
 }

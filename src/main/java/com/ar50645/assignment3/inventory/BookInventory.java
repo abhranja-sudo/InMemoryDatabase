@@ -27,10 +27,6 @@ public class BookInventory implements Inventory {
     }
 
 
-    public static Inventory getBookInventory() {
-        return new BookInventory();
-    }
-
     /**
      * If it's time to back up the Memento,
      * 1. copy the original memento to temporary file
@@ -63,7 +59,7 @@ public class BookInventory implements Inventory {
     public boolean addNewBook(Book newBook) {
 
         if(newBook.getQuantity() < 1)
-            throw new IllegalArgumentException("Book should have at least one quantity");
+            throw new IllegalArgumentException("Can't insert book with quantity less than one ");
 
         if(bookList.contains(newBook)) {
             return false;
@@ -86,37 +82,76 @@ public class BookInventory implements Inventory {
                 return true;
             }
         }
-        throw new EntityNotFoundException("Entity not found");
+        throw new EntityNotFoundException("Book not found");
     }
 
     @Override
-    public boolean addCopy(Book book) throws EntityNotFoundException {
-        return false;
+    public boolean addCopy(Book bookToAddCopy, int quantity) throws EntityNotFoundException {
+        for (Book book : bookList.getBookList()) {
+            if(book.equals(bookToAddCopy)) {
+                book.increaseQuantity(quantity);
+                checkBackup();
+                return true;
+            }
+        }
+        throw new EntityNotFoundException("Book not found");
     }
 
     @Override
-    public boolean changePrice(Book book) throws EntityNotFoundException {
-        return false;
+    public boolean changePrice(Book bookToChangePrice, double newPrice) throws EntityNotFoundException {
+        for (Book book : bookList.getBookList()) {
+            if(book.equals(bookToChangePrice)) {
+                book.setPrice(newPrice);
+                checkBackup();
+                return true;
+            }
+        }
+        throw new EntityNotFoundException("Book not found");
+    }
+
+    @Override
+    public boolean isBookAvailable(Book book) {
+        return bookList.contains(book);
     }
 
     @Override
     public double findPriceByName(String bookName) throws EntityNotFoundException {
-        return 0;
+        for (Book book : bookList.getBookList()) {
+            if(book.getName().equals(bookName)) {
+                return book.getPrice();
+            }
+        }
+        throw new EntityNotFoundException("Book not found");
     }
 
     @Override
     public double findPriceByID(int id) throws EntityNotFoundException {
-        return 0;
+        for (Book book : bookList.getBookList()) {
+            if(book.getId() == id) {
+                return book.getPrice();
+            }
+        }
+        throw new EntityNotFoundException("Book not found");
     }
 
     @Override
     public double findQuantityByName(String bookName) throws EntityNotFoundException {
-        return 0;
+        for (Book book : bookList.getBookList()) {
+            if(book.getName().equals(bookName)) {
+                return book.getQuantity();
+            }
+        }
+        throw new EntityNotFoundException("Book not found");
     }
 
     @Override
     public double findQuantityByID(int id) throws EntityNotFoundException {
-        return 0;
+        for (Book book : bookList.getBookList()) {
+            if(book.getId() == id) {
+                return book.getId();
+            }
+        }
+        throw new EntityNotFoundException("Book not found");
     }
 
     public BookList getBookList() {

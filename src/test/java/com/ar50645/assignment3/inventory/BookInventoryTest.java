@@ -1,5 +1,6 @@
 package com.ar50645.assignment3.inventory;
 
+import com.ar50645.assignment3.exception.EntityNotFoundException;
 import com.ar50645.assignment3.fileio.FileOperation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,24 +22,119 @@ class BookInventoryTest {
     void setUp() {
         FileOperation.clearFile(BOOK_LIST_MEMENTO_FILENAME);
         mementoReadWrite = new FileOperation(BOOK_LIST_MEMENTO_FILENAME);
-        bookInventory = BookInventory.getBookInventory();
+        bookInventory = new BookInventory();
     }
 
     @Test
-    void addNewBook() {
-
+    void addNewBookWhenBookIsValid() {
         List<Book> validTestData = getValidTestData();
-        for(Book book: validTestData) {
+        for (Book book : validTestData) {
             Assertions.assertTrue(bookInventory.addNewBook(book));
         }
 
-        //Addition of Duplicate book in inventory will return false
-        Assertions.assertFalse(bookInventory.addNewBook(validTestData.get(0)));
+        //check if the added book is present in inventory
+        for (Book book : getValidTestData()) {
+            Assertions.assertTrue(bookInventory.isBookAvailable(book));
+        }
+    }
 
-        //Duplicate Addition will throw IllegalArgumentException
-        Book bookWithInvalidQuantity = new Book("Book", 88.8,0);
+    @Test
+    void addNewBookWhenBookAlreadyExists() {
+
+        Book testData = new Book("testBook", 45, 2);
+        Assertions.assertTrue(bookInventory.addNewBook(testData));
+
+        //Addition of Duplicate book in inventory should return false
+        Assertions.assertFalse(bookInventory.addNewBook(testData));
+    }
+
+    @Test
+    void addNewBookWhenQuantityLessThanOne() {
+
+        Book testData = new Book("testBook", 45, 0);
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> bookInventory.addNewBook(bookWithInvalidQuantity));
+                () -> bookInventory.addNewBook(testData));
+    }
+
+    @Test
+    void sellBookWhenQuantityGreaterThanOne() {
+
+        Book testData = new Book("testBook", 45, 2);
+        double expectedQuantity = testData.getQuantity() - 1;
+
+        Assertions.assertTrue(bookInventory.addNewBook(testData));
+        Assertions.assertTrue(bookInventory.sellBook(testData));
+
+        double actualQuantity = bookInventory.findQuantityByName(testData.getName());
+        Assertions.assertEquals(expectedQuantity, actualQuantity);
+    }
+
+    @Test
+    void sellBookWhenQuantityEqualToOne() {
+
+        Book testData = new Book("testBook", 45, 1);
+        Assertions.assertTrue(bookInventory.addNewBook(testData));
+        Assertions.assertTrue(bookInventory.sellBook(testData));
+
+        //sold book shouldn't be present in the inventory since the only copy is sold
+        Assertions.assertThrows(EntityNotFoundException.class,
+                () -> bookInventory.findQuantityByName(testData.getName()));
+    }
+
+    @Test
+    void sellBookWhenBookNotExist() {
+
+        Book testData = new Book("testBook", 45.3, 3);
+        Assertions.assertThrows(EntityNotFoundException.class,
+                () -> bookInventory.sellBook(testData));
+    }
+
+    @Test
+    void addCopyWhenBookExists() {
+
+        Book testData = new Book("testBook", 45, 3);
+        int quantityToAdd = 3;
+        int expectedQuantity = testData.getQuantity() + quantityToAdd;
+
+        Assertions.assertTrue(bookInventory.addNewBook(testData));
+        Assertions.assertTrue(bookInventory.addCopy(testData, quantityToAdd));
+
+        double actualQuantity = bookInventory.findQuantityByName(testData.getName());
+        Assertions.assertEquals(expectedQuantity, actualQuantity);
+    }
+
+    @Test
+    void addCopyWhenBookNotExist() {
+
+        int quantityToAdd = 3;
+        Book testData = new Book("testBook", 45.3, 3);
+        Assertions.assertThrows(EntityNotFoundException.class,
+                () -> bookInventory.addCopy(testData, quantityToAdd));
+
+    }
+
+    @Test
+    void changePriceWhenBookExists() {
+
+        Book testData = new Book("testBook", 45.3, 3);
+        double newPrice = 88.3;
+
+        Assertions.assertTrue(bookInventory.addNewBook(testData));
+        Assertions.assertTrue(bookInventory.changePrice(testData, newPrice));
+
+        double actualQuantity = bookInventory.findPriceByName(testData.getName());
+        Assertions.assertEquals(newPrice, actualQuantity);
+    }
+
+    @Test
+    void changePriceWhenBookNotExist() {
+
+        Book testData = new Book("testBook", 45.3, 3);
+        double newPrice = 88.3;
+
+        Assertions.assertThrows(EntityNotFoundException.class,
+                () -> bookInventory.changePrice(testData, newPrice));
+
     }
 
     @Test

@@ -6,7 +6,7 @@ import com.ar50645.assignment3.fileio.FileOperation;
 
 public class BookInventory implements Inventory {
 
-    private static final int intervalForBackup = 3;
+    private static final int intervalForBackup = 10;
     private int counterForBackUp = 0;
     private static final String BOOK_LIST_MEMENTO_FILENAME = "BookListMemento.ser";
     private static final String BOOK_LIST_MEMENTO_TEMP_FILE = "BookListMementoTemp.ser";

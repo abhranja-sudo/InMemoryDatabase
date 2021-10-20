@@ -1,8 +1,6 @@
 package com.ar50645.assignment3.decorator;
 
-import com.ar50645.assignment3.command.AddBookOperation;
-import com.ar50645.assignment3.command.InventoryOperation;
-import com.ar50645.assignment3.command.InventoryOperationExecutor;
+import com.ar50645.assignment3.command.*;
 import com.ar50645.assignment3.fileio.FileOperation;
 import com.ar50645.assignment3.inventory.Book;
 import com.ar50645.assignment3.inventory.BookInventory;
@@ -28,6 +26,39 @@ class InventoryDecoratorTest {
         FileOperation.clearFile(COMMAND_OUT_FILE);
         commandReadWrite = new FileOperation(COMMAND_OUT_FILE);
         inventoryDecorator = new InventoryDecorator(new BookInventory());
+    }
+
+    @Test
+    void testCommandPersistence() {
+
+        Book testData = new Book("testBook", 45, 3);
+        List<InventoryOperation> expectedList = new ArrayList<>() ;
+
+        inventoryDecorator.addNewBook(testData);
+        expectedList.add(new AddBookOperation(testData));
+
+        inventoryDecorator.sellBook(testData);
+        expectedList.add(new SellBookOperation(testData));
+
+        int quantityToAdd = 4;
+        inventoryDecorator.addCopy(testData, quantityToAdd);
+        expectedList.add(new AddCopyOperation(testData, quantityToAdd));
+
+        double newPrice = 33;
+        inventoryDecorator.changePrice(testData, newPrice);
+        expectedList.add(new ChangePriceOperation(testData, newPrice));
+
+        List<InventoryOperation> actualList = new ArrayList<>();
+
+        //get command List from file
+        InventoryOperation command = (InventoryOperation) commandReadWrite.readNext();
+        while (command != null) {
+            actualList.add(command);
+            command = (InventoryOperation) commandReadWrite.readNext();
+        }
+
+        Assertions.assertEquals(expectedList, actualList);
+
     }
 
     @Test
@@ -57,8 +88,42 @@ class InventoryDecoratorTest {
 
     @Test
     void sellBook() {
-        
 
+        Book testData = new Book("testBook", 45, 2);
+        double expectedQuantity = testData.getQuantity() - 1;
+
+        inventoryDecorator.addNewBook(testData);
+        Assertions.assertTrue(inventoryDecorator.sellBook(testData));
+
+        double actualQuantity = inventoryDecorator.findQuantityByName(testData.getName());
+        Assertions.assertEquals(expectedQuantity, actualQuantity);
+    }
+
+    @Test
+    void addCopy() {
+        Book testData = new Book("testBook", 45, 3);
+        int quantityToAdd = 3;
+        int expectedQuantity = testData.getQuantity() + quantityToAdd;
+
+        inventoryDecorator.addNewBook(testData);
+
+        Assertions.assertTrue(inventoryDecorator.addCopy(testData, quantityToAdd));
+
+        double actualQuantity = inventoryDecorator.findQuantityByName(testData.getName());
+        Assertions.assertEquals(expectedQuantity, actualQuantity);
+    }
+
+    @Test
+    void changePrice() {
+
+        Book testData = new Book("testBook", 45.3, 3);
+        double newPrice = 88.3;
+
+        inventoryDecorator.addNewBook(testData);
+        Assertions.assertTrue(inventoryDecorator.changePrice(testData, newPrice));
+
+        double actualQuantity = inventoryDecorator.findPriceByName(testData.getName());
+        Assertions.assertEquals(newPrice, actualQuantity);
     }
 
     private List<Book> getValidTestData() {

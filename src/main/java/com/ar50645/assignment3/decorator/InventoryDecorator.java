@@ -22,11 +22,11 @@ public class InventoryDecorator implements Inventory {
         this.inventory = inventory;
         inventoryOperationExecutor = new InventoryOperationExecutor();
         fileOperation = new FileOperation(COMMAND_FILE_NAME);
-        executeSavedCommand();
+        executeSavedOpertion();
     }
 
-    //Execute saved commands from file, if any
-    private void executeSavedCommand() {
+    //Execute saved commands/operation from file, if any
+    private void executeSavedOpertion() {
         InventoryOperation commandHistory = (InventoryOperation) fileOperation.readNext();
         while (commandHistory != null) {
             inventoryOperationExecutor.executeOperation(inventory, commandHistory);

@@ -43,7 +43,7 @@ public class BookInventory implements Inventory {
             FileOperation.clearFile(BOOK_LIST_MEMENTO_FILENAME);
 
             FileOperation fileOperation = new FileOperation(BOOK_LIST_MEMENTO_FILENAME);
-            BookListState state = bookList.saveMemento();
+            BookListState state = bookList.save();
             fileOperation.writeObject(state);
 
             //clear file

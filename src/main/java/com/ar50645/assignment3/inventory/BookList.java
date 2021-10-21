@@ -14,10 +14,6 @@ public class BookList {
         return bookList;
     }
 
-    public void setBookList(List<Book> bookList) {
-        this.bookList = bookList;
-    }
-
     public boolean add(Book newBook) {
         return bookList.add(newBook);
     }
@@ -30,7 +26,7 @@ public class BookList {
         bookList.remove(book);
     }
 
-    public BookListState saveMemento() {
+    public BookListState save() {
         List<Book> bookInventoryCopy = new ArrayList<>();
         for(Book book : bookList) {
             try {

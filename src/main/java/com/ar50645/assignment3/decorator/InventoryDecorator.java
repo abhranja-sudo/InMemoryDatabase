@@ -13,15 +13,25 @@ import com.ar50645.assignment3.fileio.FileOperation;
 
 public class InventoryDecorator implements Inventory {
 
-    private final String COMMAND_OUT_FILE =  "Command.ser";
+    private final String COMMAND_FILE_NAME =  "Command.ser";
     private final InventoryOperationExecutor inventoryOperationExecutor;
     private final FileOperation fileOperation;
     private final Inventory inventory;
 
     public InventoryDecorator(Inventory inventory)  {
         this.inventory = inventory;
-        inventoryOperationExecutor = new InventoryOperationExecutor(inventory);
-        fileOperation = new FileOperation(COMMAND_OUT_FILE);
+        inventoryOperationExecutor = new InventoryOperationExecutor();
+        fileOperation = new FileOperation(COMMAND_FILE_NAME);
+        executeSavedCommand();
+    }
+
+    //Execute saved commands from file, if any
+    private void executeSavedCommand() {
+        InventoryOperation commandHistory = (InventoryOperation) fileOperation.readNext();
+        while (commandHistory != null) {
+            inventoryOperationExecutor.executeOperation(inventory, commandHistory);
+            commandHistory = (InventoryOperation) fileOperation.readNext();
+        }
     }
 
     @Override

@@ -6,4 +6,3 @@ public interface InventoryOperation {
     boolean execute(Inventory inventory);
 }
 
-//@TODO make this functional

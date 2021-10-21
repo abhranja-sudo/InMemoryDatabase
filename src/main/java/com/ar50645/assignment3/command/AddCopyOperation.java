@@ -8,8 +8,8 @@ import java.util.Objects;
 
 public class AddCopyOperation implements InventoryOperation, Serializable {
 
-    private Book book;
-    private int quantity;
+    private final Book book;
+    private final int quantity;
 
     public AddCopyOperation(Book book, int quantity) {
         this.book = book;

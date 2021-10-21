@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class AddBookOperation implements InventoryOperation, Serializable {
 
-    private Book book;
+    private final Book book;
 
     public AddBookOperation(Book book) {
         this.book = book;

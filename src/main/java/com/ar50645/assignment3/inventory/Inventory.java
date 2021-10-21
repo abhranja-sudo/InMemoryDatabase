@@ -22,6 +22,4 @@ public interface Inventory {
 
     double findQuantityByID(int id) throws EntityNotFoundException;
 
-
-
 }

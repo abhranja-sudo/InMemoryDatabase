@@ -8,8 +8,8 @@ import java.util.Objects;
 
 public class ChangePriceOperation implements InventoryOperation, Serializable {
 
-    private Book book;
-    private double newPrice;
+    private final Book book;
+    private final double newPrice;
 
     public ChangePriceOperation(Book book, double newPrice) {
         this.book = book;

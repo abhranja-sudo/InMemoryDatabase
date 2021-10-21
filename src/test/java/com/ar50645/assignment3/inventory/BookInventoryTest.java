@@ -14,7 +14,6 @@ class BookInventoryTest {
 
     private Inventory bookInventory;
     private static final int intervalForBackup = 10;
-    private int counter = 0;
     private static final String BOOK_LIST_MEMENTO_FILENAME = "BookListMemento.ser";
     private FileOperation mementoReadWrite;
 

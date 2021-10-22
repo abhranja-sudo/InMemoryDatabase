@@ -11,11 +11,7 @@ public class Book implements Serializable, Cloneable {
     private double price;
     private int quantity;
 
-    //Used to assign uniqueId to Book
-    private static int sequenceCounter = 0;
-
     public Book(String name, double price, int quantity) {
-        initializeId();
         this.name = name;
         this.price = price;
         this.quantity = quantity;
@@ -29,9 +25,8 @@ public class Book implements Serializable, Cloneable {
         return id;
     }
 
-    private void initializeId() {
-        sequenceCounter++;
-        this.id = sequenceCounter;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void decrementQuantity() {

@@ -6,23 +6,29 @@ import com.ar50645.assignment3.fileio.FileOperation;
 
 public class BookInventory implements Inventory {
 
-    private static final int intervalForBackup = 10;
+    private final int intervalForBackup = 10;
     private int counterForBackUp = 0;
-    private static final String BOOK_LIST_MEMENTO_FILENAME = "BookListMemento.ser";
-    private static final String BOOK_LIST_MEMENTO_TEMP_FILE = "BookListMementoTemp.ser";
-
+    private int counterForID;
+    private final String BOOK_LIST_MEMENTO_FILENAME = "BookListMemento.ser";
+    private final String BOOK_LIST_MEMENTO_TEMP_FILE = "BookListMementoTemp.ser";
     private final String COMMAND_OUT_FILE =  "Command.ser";
     private BookList bookList = new BookList();
 
+    public BookInventory() {
+        initializeBookList();
+    }
+
     //load BookList from memento if available
-    {
+    private void initializeBookList() {
         FileOperation fileOperation = new FileOperation(BOOK_LIST_MEMENTO_FILENAME);
         BookListState state = (BookListState) fileOperation.readNext();
         if(state != null) {
             bookList.restore(state);
+            counterForID = bookList.getLastIDUsed();
         }
         else {
             bookList = new BookList();
+            counterForID = 0;
         }
     }
 
@@ -55,6 +61,10 @@ public class BookInventory implements Inventory {
         }
     }
 
+    private void assignID(Book book) {
+        book.setId(++counterForID);
+    }
+
     @Override
     public boolean addNewBook(Book newBook) {
 
@@ -64,6 +74,8 @@ public class BookInventory implements Inventory {
         if(bookList.contains(newBook)) {
             return false;
         }
+
+        this.assignID(newBook);
 
         bookList.add(newBook);
         checkBackup();

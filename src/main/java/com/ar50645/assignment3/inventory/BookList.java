@@ -1,13 +1,15 @@
 package com.ar50645.assignment3.inventory;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class BookList {
+
     private List<Book> bookList;
 
     public BookList() {
-        this.bookList = new ArrayList<>();
+        this.bookList = new LinkedList<>();
     }
 
     public List<Book> getBookList() {
@@ -24,6 +26,10 @@ public class BookList {
 
     public void remove(Book book) {
         bookList.remove(book);
+    }
+
+    public int getLastIDUsed() {
+        return bookList.get(bookList.size() - 1).getId();
     }
 
     public BookListState save() {

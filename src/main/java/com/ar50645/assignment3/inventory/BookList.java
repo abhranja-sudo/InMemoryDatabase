@@ -1,7 +1,6 @@
 package com.ar50645.assignment3.inventory;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class BookList {
@@ -9,7 +8,7 @@ public class BookList {
     private List<Book> bookList;
 
     public BookList() {
-        this.bookList = new LinkedList<>();
+        this.bookList = new ArrayList<>();
     }
 
     public List<Book> getBookList() {

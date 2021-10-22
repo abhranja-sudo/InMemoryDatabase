@@ -6,13 +6,19 @@ import com.ar50645.assignment3.fileio.FileOperation;
 
 public class BookInventory implements Inventory {
 
+    // Used for checking if it's time to create memento
     private final int intervalForBackup = 10;
     private int counterForBackUp = 0;
+
+    // Used for assigning unique ID's to Book
     private int counterForID;
+
+    private BookList bookList;
+
     private final String BOOK_LIST_MEMENTO_FILENAME = "BookListMemento.ser";
     private final String BOOK_LIST_MEMENTO_TEMP_FILE = "BookListMementoTemp.ser";
     private final String COMMAND_OUT_FILE =  "Command.ser";
-    private BookList bookList = new BookList();
+
 
     public BookInventory() {
         initializeBookList();
@@ -20,6 +26,7 @@ public class BookInventory implements Inventory {
 
     //load BookList from memento if available
     private void initializeBookList() {
+        bookList = new BookList();
         FileOperation fileOperation = new FileOperation(BOOK_LIST_MEMENTO_FILENAME);
         BookListState state = (BookListState) fileOperation.readNext();
         if(state != null) {
